@@ -89,3 +89,16 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// // CODIGO NUESTRO
+// uint64
+// sys_sem_open(void)
+// {
+
+// return 
+// }
+
+// // extern uint64 sys_sem_open(void);
+// // extern uint64  sys_sem_close(void);
+// // extern uint64  sys_sem_up(void);
+// // extern uint64  sys_sem_down(void);
