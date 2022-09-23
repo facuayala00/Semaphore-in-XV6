@@ -12,9 +12,10 @@
 
 int *sem_array; //Array general
 
-int *sem_open(int *sem, int value){
-    sem = calloc(value, sizeof(int)); //Inicializamos sem con value elementos?
-    return sem;
+int sem_open(void){
+    // sem = calloc(value, sizeof(int)); //Inicializamos sem con value elementos?
+    // return sem;
+    printf("hola \n");
 }
 
 int sem_close(int sem);

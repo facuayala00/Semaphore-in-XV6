@@ -91,13 +91,33 @@ sys_uptime(void)
 }
 
 // // CODIGO NUESTRO
-// uint64
-// sys_sem_open(void)
-// {
+uint64
+sys_sem_open(void)
+{
 
-// return 
-// }
+  return sem_open();
+}
 
+uint64
+sys_sem_close(void)
+{
+  
+  return 0;
+}
+
+uint64
+sys_sem_up(void)
+{
+  
+  return 0;
+}
+
+uint64
+sys_sem_down(void)
+{
+  
+  return 0;
+}
 // // extern uint64 sys_sem_open(void);
 // // extern uint64  sys_sem_close(void);
 // // extern uint64  sys_sem_up(void);

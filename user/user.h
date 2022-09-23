@@ -22,6 +22,11 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+//syscalls nuestas
+int sem_open(void); //cambiar tipo
+int sem_close(int sem);
+int sem_up(int sem);
+int sem_down(int sem);
 
 // ulib.c
 int stat(const char*, struct stat*);

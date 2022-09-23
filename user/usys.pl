@@ -36,3 +36,8 @@ entry("getpid");
 entry("sbrk");
 entry("sleep");
 entry("uptime");
+#syscalls nuestas
+entry("sem_open");
+entry("sem_close");
+entry("sem_up");
+entry("sem_down");
