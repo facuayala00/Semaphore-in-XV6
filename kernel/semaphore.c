@@ -13,7 +13,7 @@
 int sem_array[64]; 
 int cont = 0;
 
-int sem_open(void){
+int sem_open(int sem){
     // sem = calloc(value, sizeof(int)); //Inicializamos sem con value elementos?
     // return sem;
     printf("hola \n");

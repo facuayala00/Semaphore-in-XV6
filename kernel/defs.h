@@ -107,10 +107,10 @@ int             either_copyout(int user_dst, uint64 dst, void *src, uint64 len);
 int             either_copyin(void *dst, int user_src, uint64 src, uint64 len);
 void            procdump(void);
 //nuestro
-int 						sem_open(void);
-int 						sem_close(int sem);
-int 						sem_up(int sem);
-int							sem_down(int sem);
+int				sem_open(int sem);
+int				sem_close(int sem);
+int				sem_up(int sem);
+int				sem_down(int sem);
 
 
 // swtch.S

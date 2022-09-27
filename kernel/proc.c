@@ -681,27 +681,3 @@ procdump(void)
     printf("\n");
   }
 }
-
-
-int sem_open(void)
-{
-    // sem = calloc(value, sizeof(int)); //Inicializamos sem con value elementos?
-    // return sem;
-    printf("hola \n");
-    return 0;
-}
-
-int sem_close(int sem) 
-{
-  return sem = sem;
-}
-
-int sem_up(int sem) 
-{
-  return sem = sem;
-}
-
-int sem_down(int sem)
-{
-  return sem = sem;
-}

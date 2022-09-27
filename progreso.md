@@ -7,12 +7,10 @@ Archivos que no hay que tocar mas
 `syscall.h`
 `syscall.c`
 `usys.pl`
-
-Archivos donde hay que cambiar el tipo
 `user.h`
 `defs.h`  
 
 
 Archivos a completar bien bien
-`proc.c`
-`sysproc.`
+SE EMPIEZA A TRABAJR EN `semaphore.c` en vez de `proc.c`
+`sysproc.` 
