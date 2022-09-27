@@ -13,7 +13,7 @@ int sem_array[64];
 int cont = 0;
 
 int 
-sem_open(int sem)
+sem_open(int sem, int value)
 {
     printf("open magico %d \n", sem);
     return sem;

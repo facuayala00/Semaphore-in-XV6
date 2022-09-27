@@ -11,12 +11,12 @@ void
 main(int argc, char *argv[])
 {
 	int rally = atoi(argv[1]);
-	printf("%d el numero para chequear (despues sacar) \n", rally);
+	// printf("%d el numero para chequear (despues sacar) \n", rally);
 
 	//TESTEO DE SYSCALL
-	// int a = sem_open(rally);
+	int a = sem_open(rally, 69);
 	// printf("%d \n", a + 1);
-
+	a = a;
 	// int b = sem_close(3);
 
 	// int c = sem_up(2);

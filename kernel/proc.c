@@ -683,9 +683,9 @@ procdump(void)
 }
 
 int 
-sem_open(int sem)
+sem_open(int sem, int value)
 {
-    printf("open magico %d \n", sem);
+    printf("open magico %d con value %d\n", sem, value);
     return sem;
 }
 

@@ -94,9 +94,10 @@ sys_uptime(void)
 uint64
 sys_sem_open(void)
 {
-  int sem;
+  int sem, value;
   argint(0, &sem);
-  return sem_open(sem);
+  argint(1, &value);
+  return sem_open(sem, value);
 }
 
 uint64

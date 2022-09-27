@@ -23,10 +23,10 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 //syscalls nuestas
-int sem_open(int sem); //cambiar tipo
-int sem_close(int sem);
-int sem_up(int sem);
-int sem_down(int sem);
+int sem_open(int, int); //cambiar tipo
+int sem_close(int);
+int sem_up(int);
+int sem_down(int);
 
 // ulib.c
 int stat(const char*, struct stat*);
