@@ -11,9 +11,10 @@
 int cant_proc = 0;
 int sem_array[64];
 
+int sem_open(void){
 
-
-int sem_open(int sem, int value);
+    printf("hola \n");
+}
 
 int sem_close(int sem);
 
