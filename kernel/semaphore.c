@@ -7,12 +7,14 @@
 #include "fs.h"
 #include "sleeplock.h"
 #include "file.h"
+#include <alloca.h>
+#include <stdlib.h>
 
-int cant_proc = 0;
-int sem_array[64];
+int *sem_array; //Array general
 
 int sem_open(void){
-
+    // sem = calloc(value, sizeof(int)); //Inicializamos sem con value elementos?
+    // return sem;
     printf("hola \n");
 }
 

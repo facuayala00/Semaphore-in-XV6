@@ -101,6 +101,7 @@ extern uint64 sys_unlink(void);
 extern uint64 sys_link(void);
 extern uint64 sys_mkdir(void);
 extern uint64 sys_close(void);
+//syscalls nuestras
 extern uint64 sys_sem_open(void);
 extern uint64  sys_sem_close(void);
 extern uint64  sys_sem_up(void);
@@ -130,6 +131,7 @@ static uint64 (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
+//syscalls nuestras
 [SYS_sem_open] sys_sem_open,
 [SYS_sem_close] sys_sem_close,
 [SYS_sem_up] sys_sem_up,
