@@ -681,3 +681,31 @@ procdump(void)
     printf("\n");
   }
 }
+
+int 
+sem_open(int sem)
+{
+    printf("open magico %d \n", sem);
+    return sem;
+}
+
+int 
+sem_close(int sem)
+{
+    printf("close extravagente %d \n", sem);
+    return sem;
+}
+
+int 
+sem_up(int sem)
+{
+    printf("up epico %d \n", sem);
+    return sem;
+}
+
+int 
+sem_down(int sem)
+{
+    printf("down locura %d \n", sem);
+    return sem;
+}

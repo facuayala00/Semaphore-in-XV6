@@ -14,9 +14,16 @@ main(int argc, char *argv[])
 	printf("%d el numero para chequear (despues sacar) \n", rally);
 
 	//TESTEO DE SYSCALL
-	int a = sem_open();
-	a = a;
+	// int a = sem_open(rally);
+	// printf("%d \n", a + 1);
 
+	// int b = sem_close(3);
+
+	// int c = sem_up(2);
+
+	// int d = sem_down(1);
+
+	// printf("%d, %d, %d \n", b, c, d);
   // int pid_a = fork();
 	// if (pid_a < 0) {
 	// 	printf("erroraso del fork \n");

@@ -1,8 +1,3 @@
-# cambios 23/09 11:42 am
-Ahora estarian preparadas "las bases" para implementar las syscalls  
-hay que cambiar un par de cosas (cambie los tipos para simplificar)   
-y no se si se puede codear en semaphore.c
-
 Archivos que no hay que tocar mas
 `syscall.h`
 `syscall.c`
@@ -12,5 +7,9 @@ Archivos que no hay que tocar mas
 
 
 Archivos a completar bien bien
-SE EMPIEZA A TRABAJR EN `semaphore.c` en vez de `proc.c`
-`sysproc.` 
+SE EMPIEZA A TRABAJR EN `semaphore.c` en vez de `proc.c`  
+No sabemos como hacer andar las cosas desde semaphore.c  
+Por ahora trabajar en `sema` y copiarlo a `proc` c:  
+
+`sysproc.`    
+Deberia estar listo, ya se procesan las syscalls y andan bien (ver comentarios de ping pong)
