@@ -10,7 +10,8 @@
 #include <alloca.h>
 #include <stdlib.h>
 
-int *sem_array; //Array general
+int sem_array[64]; 
+int cont = 0;
 
 int sem_open(void){
     // sem = calloc(value, sizeof(int)); //Inicializamos sem con value elementos?
