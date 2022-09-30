@@ -113,20 +113,19 @@ int
 sem_down(int sem)
 {
   acquire(&sem_lock);
-
-  if (sem_array[sem].value > 0) {
-    sem_array[sem].value--;
-  } 
-  else { //caso (sem_array[sem] <= 0)
-    printf("Sem en 0 \n");
-  }
-  if (sem_array[sem].value == 0) {
-    sleep(&sem_array[sem], &sem_lock);
-  }
-
-  if (sem_array[sem].value < 0) {
+  if (sem_array[sem].active < 0) { //el arreglo esta inactivo
     return ERROR;
-  }else {
+  }
+  else {
+    if (sem_array[sem].value > 0) {
+      sem_array[sem].value--;
+    } 
+    else { //caso (sem_array[sem] == 0)
+      while (sem_array[sem].value == 0) {
+        sleep(&sem_array[sem], &sem_lock);  //se intento pedir recurse en 0 por lo que se duerme el proceso
+      }
+      sem_array[sem].value--;         //apenas se despeirta se "consume el recurso"
+    }
     release(&sem_lock);
     return SUCCESS;
   }

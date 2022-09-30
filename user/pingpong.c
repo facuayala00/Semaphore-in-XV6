@@ -12,8 +12,12 @@ void
 main(int argc, char *argv[])
 {
   int rally = atoi(argv[1]);
+  if (rally == 0) {
+    printf("minimo 1 porfi \n");
+    exit(1);
+  }
 
-  int err = sem_open(0, 2);
+  int err = sem_open(0, 1);
   err = err;
 
   int pid_a = fork();
