@@ -50,6 +50,7 @@ sys_sem_down(void)
 struct semaphore {
     struct spinlock lock;
     int max_value;
+    int value;
 };
 
 
@@ -60,7 +61,7 @@ int
 sem_open(int sem, int value)
 {
   acquire(&sem_lock);
-  sem_array[sem].max_value = value;
+  sem_array[sem].value = value;
   release(&sem_lock);
   return 1;
 }
@@ -69,7 +70,7 @@ int
 sem_close(int sem)
 {
   acquire(&sem_lock);
-  sem_array[sem].max_value = 0;
+  sem_array[sem].value = 0;
   release(&sem_lock);
   return 1;
 }
@@ -79,7 +80,7 @@ sem_up(int sem)
 {
   acquire(&sem_lock);
 
-  sem_array[sem].max_value++;
+  sem_array[sem].value++;
  // struct proc* p = myproc();
   wakeup(&sem_array[sem]);
   release(&sem_lock);
@@ -91,13 +92,13 @@ sem_down(int sem)
 {
   acquire(&sem_lock);
 
-  if (sem_array[sem].max_value > 0) {
-    sem_array[sem].max_value--;
+  if (sem_array[sem].value > 0) {
+    sem_array[sem].value--;
   } 
   else { //caso (sem_array[sem] <= 0)
     printf("Sem en 0 \n");
   }
-  if (sem_array[sem].max_value == 0) {
+  if (sem_array[sem].value == 0) {
     sleep(&sem_array[sem], &sem_lock);
   }
 
