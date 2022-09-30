@@ -18,19 +18,30 @@ main(int argc, char *argv[])
   }
 
   int err = sem_open(0, 1);
-  err = err;
+  if (err == 0){
+    printf("erroraso del sem_open\n");
+    exit(1);
+  }
 
   int pid_a = fork();
   if (pid_a < 0) {
     printf("erroraso del fork \n");
+    exit(1);
   }
   else if (pid_a == 0){
     for(unsigned int i = 0; i < rally; i++){
       int a = sem_down(0);
+      if (a == 0){
+        printf("erroraso del sem_up \n");
+        exit(1);
+      }
       printf("ping \n");
+
       int b = sem_up(0);
-      a = a;
-      b = b;
+      if(b == 0){
+        printf("erroraso del sem_down \n");
+        exit(1);
+      }
     }
     exit(0); //mato al beibi (que cruel que suena)
   }
@@ -42,10 +53,16 @@ main(int argc, char *argv[])
   else if (pid_b == 0){
     for(unsigned int i = 0; i < rally; i++){
       int a = sem_down(0);
+      if (a == 0){
+        printf("erroraso del sem_up \n");
+        exit(1);
+      }      
       printf("pong \n");
       int b = sem_up(0);
-      a = a;
-      b = b;
+      if(b == 0){
+        printf("erroraso del sem_down \n");
+        exit(1);
+      }     
     }
     exit(0); //mato al beibi (que cruel que suena)
   }
