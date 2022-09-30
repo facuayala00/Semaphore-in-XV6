@@ -8,6 +8,7 @@
 #include "sleeplock.h"
 #include "file.h"
 
+
 //Parte que iría en sysproc.c
 uint64
 sys_sem_open(void)
@@ -45,14 +46,21 @@ sys_sem_down(void)
 
 
 //código que iría en proc.c
-int sem_array[64]; 
+
+struct semaphore {
+    struct spinlock lock;
+    int max_value;
+};
+
+
+struct semaphore sem_array[64]; 
 struct spinlock sem_lock;
 
 int 
 sem_open(int sem, int value)
 {
   acquire(&sem_lock);
-  sem_array[sem] = value;
+  sem_array[sem].max_value = value;
   release(&sem_lock);
   return 1;
 }
@@ -61,7 +69,7 @@ int
 sem_close(int sem)
 {
   acquire(&sem_lock);
-  sem_array[sem] = 0;
+  sem_array[sem].max_value = 0;
   release(&sem_lock);
   return 1;
 }
@@ -71,7 +79,7 @@ sem_up(int sem)
 {
   acquire(&sem_lock);
 
-  sem_array[sem]++;
+  sem_array[sem].max_value++;
  // struct proc* p = myproc();
   wakeup(&sem_array[sem]);
   release(&sem_lock);
@@ -83,13 +91,13 @@ sem_down(int sem)
 {
   acquire(&sem_lock);
 
-  if (sem_array[sem] > 0) {
-    sem_array[sem]--;
+  if (sem_array[sem].max_value > 0) {
+    sem_array[sem].max_value--;
   } 
   else { //caso (sem_array[sem] <= 0)
     printf("Sem en 0 \n");
   }
-  if (sem_array[sem] == 0) {
+  if (sem_array[sem].max_value == 0) {
     sleep(&sem_array[sem], &sem_lock);
   }
 
