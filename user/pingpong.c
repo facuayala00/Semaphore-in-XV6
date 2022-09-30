@@ -47,5 +47,6 @@ main(int argc, char *argv[])
   }
 
   wait(0);  //wait para que no se bugee el $ del shell
+  sem_close(0);
   exit(0);
 }
