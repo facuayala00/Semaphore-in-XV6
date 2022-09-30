@@ -59,7 +59,7 @@ struct semaphore {
 
 
 struct semaphore sem_array[64]; 
-struct spinlock sem_lock;
+
 
 int 
 sem_open(int sem, int value)
@@ -67,11 +67,11 @@ sem_open(int sem, int value)
   if (sem_array[sem].active == 1) {
     return ERROR;
   }else {
-    acquire(&sem_lock);
+    acquire(&sem_array[sem].lock);
     sem_array[sem].value = value;
     sem_array[sem].max_value = value;
     sem_array[sem].active = 1;
-    release(&sem_lock);
+    release(&sem_array[sem].lock);
     return SUCCESS;
   }
 
@@ -84,11 +84,11 @@ sem_close(int sem)
   if (sem_array[sem].value != sem_array[sem].max_value) {
     return ERROR;
   }else {
-    acquire(&sem_lock);
+    acquire(&sem_array[sem].lock);
     sem_array[sem].value = 0;
     sem_array[sem].max_value = 0;
     sem_array[sem].active = 0;
-    release(&sem_lock);
+    release(&sem_array[sem].lock);
     return SUCCESS;
   }
 
@@ -100,10 +100,10 @@ sem_up(int sem)
   if (sem_array[sem].value >= sem_array[sem].max_value) {
     return ERROR;
   }else {
-  acquire(&sem_lock);
+  acquire(&sem_array[sem].lock);
   sem_array[sem].value++;
   wakeup(&sem_array[sem]);
-  release(&sem_lock);
+  release(&sem_array[sem].lock);
   return SUCCESS;
   }
 
@@ -112,7 +112,7 @@ sem_up(int sem)
 int 
 sem_down(int sem)
 {
-  acquire(&sem_lock);
+  acquire(&sem_array[sem].lock);
   if (sem_array[sem].active < 0) { //el arreglo esta inactivo
     return ERROR;
   }
@@ -122,11 +122,11 @@ sem_down(int sem)
     } 
     else { //caso (sem_array[sem] == 0)
       while (sem_array[sem].value == 0) {
-        sleep(&sem_array[sem], &sem_lock);  //se intento pedir recurse en 0 por lo que se duerme el proceso
+        sleep(&sem_array[sem], &sem_array[sem].lock);  //se intento pedir recurse en 0 por lo que se duerme el proceso
       }
       sem_array[sem].value--;         //apenas se despeirta se "consume el recurso"
     }
-    release(&sem_lock);
+    release(&sem_array[sem].lock);
     return SUCCESS;
   }
 }
