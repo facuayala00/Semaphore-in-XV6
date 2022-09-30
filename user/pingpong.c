@@ -2,6 +2,7 @@
 #include "kernel/stat.h"
 #include "user/user.h"
 
+
 /* 
 esqueleto super esqueletico del pingpong.c
 El programa pingpong deberá hacer fork y con los dos procesos resultantes:
@@ -11,41 +12,40 @@ void
 main(int argc, char *argv[])
 {
   int rally = atoi(argv[1]);
-  // printf("%d el numero para chequear (despues sacar) \n", rally);
 
-  //TESTEO DE SYSCALL
-  int a = sem_open(0, rally);
+  int err = sem_open(0, 2);
+  err = err;
 
-  int b = sem_down(0);
-  b = sem_down(0);
+  int pid_a = fork();
+  if (pid_a < 0) {
+    printf("erroraso del fork \n");
+  }
+  else if (pid_a == 0){
+    for(unsigned int i = 0; i < rally; i++){
+      int a = sem_down(0);
+      printf("ping \n");
+      int b = sem_up(0);
+      a = a;
+      b = b;
+    }
+    exit(0); //mato al beibi (que cruel que suena)
+  }
 
-  b = sem_close(0);
+  int pid_b =   fork();
+  if (pid_b < 0) {
+    printf("erroraso del fork \n");
+  }
+  else if (pid_b == 0){
+    for(unsigned int i = 0; i < rally; i++){
+      int a = sem_down(0);
+      printf("pong \n");
+      int b = sem_up(0);
+      a = a;
+      b = b;
+    }
+    exit(0); //mato al beibi (que cruel que suena)
+  }
 
-
-a=a;
-b=b;
-  // printf("%d, %d, %d \n", b, c, d);
-  // int pid_a = fork();
-  // if (pid_a < 0) {
-  //   printf("erroraso del fork \n");
-  // }
-  // else if (pid_a == 0){
-  //   for(unsigned int i = 0; i < rally; i++){
-  //     printf("ping \n");
-  //   }
-  //   exit(0); //mato al beibi (que cruel que suena)
-  // }
-
-  // int pid_b = fork();
-  // if (pid_b < 0) {
-  //   printf("erroraso del fork \n");
-  // }
-  // else if (pid_b == 0){
-  //   for(unsigned int i = 0; i < rally; i++){
-  //     printf("pong \n");
-  //   }
-  //   exit(0); //mato al beibi (que cruel que suena)
-  // }
-
+  wait(0);  //wait para que no se bugee el $ del shell
   exit(0);
 }

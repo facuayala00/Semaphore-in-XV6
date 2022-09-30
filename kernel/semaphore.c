@@ -46,46 +46,53 @@ sys_sem_down(void)
 
 //código que iría en proc.c
 int sem_array[64]; 
-int cont = 0;
+struct spinlock sem_lock;
 
 int 
 sem_open(int sem, int value)
 {
-    if (sem_array[sem] != 0) { //esta guarda esta mal?
-        printf("hermano ya se reservó ese sem \n");
-        return 0;
-    }
-    sem_array[sem] = value;
-    printf("aca tenes tu super semaforo :3 \n");
-    return 1;
+  acquire(&sem_lock);
+  sem_array[sem] = value;
+  release(&sem_lock);
+  return 1;
 }
 
 int 
 sem_close(int sem)
 {
-    sem_array[sem] = 0;
-    return 1;
+  acquire(&sem_lock);
+  sem_array[sem] = 0;
+  release(&sem_lock);
+  return 1;
 }
 
 int 
 sem_up(int sem)
 {
-    sem_array[sem]++;
-    return 1;
+  acquire(&sem_lock);
+
+  sem_array[sem]++;
+ // struct proc* p = myproc();
+  wakeup(&sem_array[sem]);
+  release(&sem_lock);
+  return 1;
 }
 
 int 
 sem_down(int sem)
 {
-    if (sem_array[sem] == 0) {
-        printf("flaco ya estamos en 0 no bajes mas \n");
-        return 0;
-    }
-    else {
-        sem_array[sem]--;
-        if (sem_array[sem] == 0) {
-            printf("a noniiiiiiir USAR LOCKS Y WAASDJLASDJASJ\n");
-        }
-    }
-    return 1;
+  acquire(&sem_lock);
+
+  if (sem_array[sem] > 0) {
+    sem_array[sem]--;
+  } 
+  else { //caso (sem_array[sem] <= 0)
+    printf("Sem en 0 \n");
+  }
+  if (sem_array[sem] == 0) {
+    sleep(&sem_array[sem], &sem_lock);
+  }
+
+  release(&sem_lock);
+  return 1;
 }
