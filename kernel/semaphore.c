@@ -114,6 +114,7 @@ sem_down(int sem)
 {
   acquire(&sem_array[sem].lock);
   if (sem_array[sem].active < 0) { //el arreglo esta inactivo
+    release(&sem_array[sem].lock);
     return ERROR;
   }
   else {
@@ -122,9 +123,9 @@ sem_down(int sem)
     } 
     else { //caso (sem_array[sem] == 0)
       while (sem_array[sem].value == 0) {
-        sleep(&sem_array[sem], &sem_array[sem].lock);  //se intento pedir recurse en 0 por lo que se duerme el proceso
+        sleep(&sem_array[sem], &sem_array[sem].lock);  //se intento pedir recurso en 0 por lo que se duerme el proceso
       }
-      sem_array[sem].value--;         //apenas se despeirta se "consume el recurso"
+      sem_array[sem].value--;         //apenas se despierta se "consume el recurso"
     }
     release(&sem_array[sem].lock);
     return SUCCESS;

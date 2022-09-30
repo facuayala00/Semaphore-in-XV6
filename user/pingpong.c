@@ -35,7 +35,7 @@ main(int argc, char *argv[])
     exit(0); //mato al beibi (que cruel que suena)
   }
 
-  int pid_b =   fork();
+  int pid_b = fork();
   if (pid_b < 0) {
     printf("erroraso del fork \n");
   }
