@@ -8,6 +8,9 @@
 #include "sleeplock.h"
 #include "file.h"
 
+#define ERROR 0
+#define SUCCESS 1
+#define SEM_ARRAY_LENGTH 64
 
 //Parte que iría en sysproc.c
 uint64
@@ -50,6 +53,7 @@ sys_sem_down(void)
 struct semaphore {
     struct spinlock lock;
     int max_value;
+    int active;
     int value;
 };
 
@@ -60,31 +64,49 @@ struct spinlock sem_lock;
 int 
 sem_open(int sem, int value)
 {
-  acquire(&sem_lock);
-  sem_array[sem].value = value;
-  release(&sem_lock);
-  return 1;
+  if (sem_array[sem].active == 1) {
+    return ERROR;
+  }else {
+    acquire(&sem_lock);
+    sem_array[sem].value = value;
+    sem_array[sem].max_value = value;
+    sem_array[sem].active = 1;
+    release(&sem_lock);
+    return SUCCESS;
+  }
+
+
 }
 
 int 
 sem_close(int sem)
 {
-  acquire(&sem_lock);
-  sem_array[sem].value = 0;
-  release(&sem_lock);
-  return 1;
+  if (sem_array[sem].value != sem_array[sem].max_value) {
+    return ERROR;
+  }else {
+    acquire(&sem_lock);
+    sem_array[sem].value = 0;
+    sem_array[sem].max_value = 0;
+    sem_array[sem].active = 0;
+    release(&sem_lock);
+    return SUCCESS;
+  }
+
 }
 
 int 
 sem_up(int sem)
 {
+  if (sem_array[sem].value >= sem_array[sem].max_value) {
+    return ERROR;
+  }else {
   acquire(&sem_lock);
-
   sem_array[sem].value++;
- // struct proc* p = myproc();
   wakeup(&sem_array[sem]);
   release(&sem_lock);
-  return 1;
+  return SUCCESS;
+  }
+
 }
 
 int 
@@ -102,6 +124,10 @@ sem_down(int sem)
     sleep(&sem_array[sem], &sem_lock);
   }
 
-  release(&sem_lock);
-  return 1;
+  if (sem_array[sem].value < 0) {
+    return ERROR;
+  }else {
+    release(&sem_lock);
+    return SUCCESS;
+  }
 }
