@@ -17,68 +17,84 @@ main(int argc, char *argv[])
     exit(1);
   }
 
-  int err = sem_open(0, 1);
-  if (err == 0){
+  int err_open_a = sem_open(0, 1);    //semaforo del papi
+  if (err_open_a == 0){
     printf("erroraso del sem_open\n");
     exit(1);
   }
 
-  int pid_a = fork();
-  if (pid_a < 0) {
+  int err_open_b = sem_open(9, 1);  //semaforo del hijo
+  if (err_open_b == 0){
+    printf("erroraso del sem_open\n");
+    exit(1);
+  }
+
+  int nash = sem_down(9);   //le restamos para "inicializarlo" en 0
+  if(nash == 0){
+    printf("erroraso del sem_down \n");
+    exit(1);
+  }
+
+
+  int pid = fork();
+  if (pid < 0) {
     printf("erroraso del fork \n");
     exit(1);
   }
-  else if (pid_a == 0){
-    for(unsigned int i = 0; i < rally; i++){
-      int a = sem_down(0);
-      if (a == 0){
-        printf("erroraso del sem_down \n");
+  if (pid > 0) { //padre
+    for (uint i = 0; i < rally; i++) {
+      int err_down = sem_down(0);
+      if (err_down == 0) {
+        printf("Erroraso del down del padre \n");
         exit(1);
       }
-      printf("ping \n");
+      printf("ping \n"); 
 
-      int b = sem_up(0);
-      if(b == 0){
-        printf("erroraso del sem_up \n");
+      int err_up = sem_up(9);
+      if (err_up == 0) {
+        printf("Erroraso del up al hijo desde el padre \n");
         exit(1);
       }
-    }
-    exit(0); //mato al beibi (que cruel que suena)
+    } 
   }
 
-  int pid_b = fork();
-  if (pid_b < 0) {
-    printf("erroraso del fork \n");
-  }
-  else if (pid_b == 0){
-    for(unsigned int i = 0; i < rally; i++){
-      int a = sem_down(0);
-      if (a == 0){
-        printf("erroraso del sem_down \n");
+  else if (pid == 0) {
+    for (uint i = 0; i < rally; i++) {
+      int err_down = sem_down(9);
+      if (err_down == 0) {
+        printf("Erroraso del down del beibi \n");
         exit(1);
-      }      
+      }
+      printf("          pong \n"); 
 
-      printf("pong \n");
-
-      int b = sem_up(0);
-      if(b == 0){
-        printf("erroraso del sem_up \n");
+      int err_up = sem_up(0);
+      if (err_up == 0) {
+        printf("Erroraso del up al padre desde el hijitus \n");
         exit(1);
-      }     
-    }
-    exit(0); //mato al beibi (que cruel que suena)
+      }
+    } 
+    exit(0); //sacrifico al beibi a los dioses supremos del abismo
   }
 
-  if (pid_a >0 || pid_b>0) {
-    wait(0);
-  }
-  wait(0);  //wait para que no se bugee el $ del shell
+  wait(0);
 
-  err = sem_close(0);
-  if(err == 0){
-    printf("erroraso del close\n");
+  int err_close_p = sem_close(0); //cierro al padre
+  if (err_close_p == 0) {
+    printf("error close padre \n");
     exit(1);
   }
+
+  int err_up = sem_up(9);
+  if (err_up == 0) {
+    printf("Erroraso del up al padre desde el hijitus \n");
+    exit(1);
+  }
+  int err_close_b = sem_close(9); //cierro al beibi
+  if (err_close_b == 0) {
+    printf("error close padre \n");
+    exit(1);
+  }
+
 
   exit(0);
 }
