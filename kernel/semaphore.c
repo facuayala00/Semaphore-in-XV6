@@ -64,10 +64,12 @@ struct semaphore sem_array[64];
 int 
 sem_open(int sem, int value)
 {
+  acquire(&sem_array[sem].lock);
   if (sem_array[sem].active == 1) {
+    release(&sem_array[sem].lock);
     return ERROR;
   }else {
-    acquire(&sem_array[sem].lock);
+
     sem_array[sem].value = value;
     sem_array[sem].max_value = value;
     sem_array[sem].active = 1;
@@ -81,10 +83,12 @@ sem_open(int sem, int value)
 int 
 sem_close(int sem)
 {
+  acquire(&sem_array[sem].lock);
   if (sem_array[sem].value != sem_array[sem].max_value) {
+    release(&sem_array[sem].lock);
     return ERROR;
   }else {
-    acquire(&sem_array[sem].lock);
+
     sem_array[sem].value = 0;
     sem_array[sem].max_value = 0;
     sem_array[sem].active = 0;
@@ -97,10 +101,12 @@ sem_close(int sem)
 int 
 sem_up(int sem)
 {
+  acquire(&sem_array[sem].lock);
   if (sem_array[sem].value >= sem_array[sem].max_value) {
+    release(&sem_array[sem].lock);
     return ERROR;
   }else {
-  acquire(&sem_array[sem].lock);
+
   sem_array[sem].value++;
   wakeup(&sem_array[sem]);
   release(&sem_array[sem].lock);
