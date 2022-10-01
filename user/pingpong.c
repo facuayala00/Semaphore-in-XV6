@@ -32,14 +32,14 @@ main(int argc, char *argv[])
     for(unsigned int i = 0; i < rally; i++){
       int a = sem_down(0);
       if (a == 0){
-        printf("erroraso del sem_up \n");
+        printf("erroraso del sem_down \n");
         exit(1);
       }
       printf("ping \n");
 
       int b = sem_up(0);
       if(b == 0){
-        printf("erroraso del sem_down \n");
+        printf("erroraso del sem_up \n");
         exit(1);
       }
     }
@@ -54,14 +54,14 @@ main(int argc, char *argv[])
     for(unsigned int i = 0; i < rally; i++){
       int a = sem_down(0);
       if (a == 0){
-        printf("erroraso del sem_up \n");
+        printf("erroraso del sem_down \n");
         exit(1);
       }      
       printf("pong \n");
 
       int b = sem_up(0);
       if(b == 0){
-        printf("erroraso del sem_down \n");
+        printf("erroraso del sem_up \n");
         exit(1);
       }     
     }
