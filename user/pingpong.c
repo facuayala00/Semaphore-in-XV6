@@ -2,12 +2,6 @@
 #include "kernel/stat.h"
 #include "user/user.h"
 
-
-/* 
-esqueleto super esqueletico del pingpong.c
-El programa pingpong deberá hacer fork y con los dos procesos resultantes:
-*/
-
 void
 main(int argc, char *argv[])
 {
@@ -30,7 +24,7 @@ main(int argc, char *argv[])
   }
 
   int nash = sem_down(9);   //le restamos para "inicializarlo" en 0
-  if(nash == 0){
+  if(nash == 0){            //el manejo de error del close (y del up) nos obliga a tener un valor maximo inicial que cumplir
     printf("erroraso del sem_down \n");
     exit(1);
   }
@@ -41,16 +35,16 @@ main(int argc, char *argv[])
     printf("erroraso del fork \n");
     exit(1);
   }
-  if (pid > 0) { //padre
+  if (pid > 0) { //padre hace pings
     for (uint i = 0; i < rally; i++) {
-      int err_down = sem_down(0);
+      int err_down = sem_down(0);       //labura el padre y se duerme (tiene doble jornada, se re cansa)
       if (err_down == 0) {
         printf("Erroraso del down del padre \n");
         exit(1);
       }
       printf("ping \n"); 
 
-      int err_up = sem_up(9);
+      int err_up = sem_up(9);        //despierta al hijo
       if (err_up == 0) {
         printf("Erroraso del up al hijo desde el padre \n");
         exit(1);
@@ -60,14 +54,14 @@ main(int argc, char *argv[])
 
   else if (pid == 0) {
     for (uint i = 0; i < rally; i++) {
-      int err_down = sem_down(9);
+      int err_down = sem_down(9);     //labura el beibi y se duerme (tuvo merienda compartida en el jardin y se empacho, se re cansa)
       if (err_down == 0) {
         printf("Erroraso del down del beibi \n");
         exit(1);
       }
       printf("          pong \n"); 
 
-      int err_up = sem_up(0);
+      int err_up = sem_up(0);     //despierta el padre
       if (err_up == 0) {
         printf("Erroraso del up al padre desde el hijitus \n");
         exit(1);
@@ -78,7 +72,7 @@ main(int argc, char *argv[])
 
   wait(0);
 
-  int err_close_p = sem_close(0); //cierro al padre
+  int err_close_p = sem_close(0); //cierro el semaforo padre
   if (err_close_p == 0) {
     printf("error close padre \n");
     exit(1);
@@ -89,7 +83,7 @@ main(int argc, char *argv[])
     printf("Erroraso del up al padre desde el hijitus \n");
     exit(1);
   }
-  int err_close_b = sem_close(9); //cierro al beibi
+  int err_close_b = sem_close(9); //cierro el sem beibi
   if (err_close_b == 0) {
     printf("error close padre \n");
     exit(1);
