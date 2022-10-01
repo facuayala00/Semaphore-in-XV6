@@ -58,6 +58,7 @@ main(int argc, char *argv[])
         exit(1);
       }      
       printf("pong \n");
+
       int b = sem_up(0);
       if(b == 0){
         printf("erroraso del sem_down \n");
@@ -67,7 +68,14 @@ main(int argc, char *argv[])
     exit(0); //mato al beibi (que cruel que suena)
   }
 
+
   wait(0);  //wait para que no se bugee el $ del shell
-  sem_close(0);
+  
+  err = sem_close(0);
+  if(err == 0){
+    printf("erroraso del close\n");
+    exit(1);
+  }
+
   exit(0);
 }
