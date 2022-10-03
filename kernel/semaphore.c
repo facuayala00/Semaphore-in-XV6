@@ -8,9 +8,9 @@
 #include "sleeplock.h"
 #include "file.h"
 
-#define ERROR 0     //definicion de error
-#define SUCCESS 1
-#define SEM_ARRAY_LENGTH 64
+#define ERROR 0     // definicion de error
+#define SUCCESS 1   // definicion exito
+#define SEM_ARRAY_LENGTH 64 // cantidad maxima de semaforos
 
 //Parte que iría en sysproc.c
 uint64
@@ -65,7 +65,7 @@ struct semaphore sem_array[64];
 int 
 sem_open(int sem, int value)
 {
-  initlock(&sem_array[sem].lock, "sem");    //se inicia el lock por buena practica
+  initlock(&sem_array[sem].lock, "sem");    // inicializacion del lock
   acquire(&sem_array[sem].lock);
   if (sem_array[sem].active == 1) {         //si el semaforo esta abierto, da error
     release(&sem_array[sem].lock);
@@ -90,8 +90,7 @@ sem_close(int sem)
     release(&sem_array[sem].lock);
     return ERROR;
   }else {
-
-    sem_array[sem].value = 0;         //por convención ponemos 0
+    sem_array[sem].value = 0;         
     sem_array[sem].max_value = 0;
     sem_array[sem].active = 0;        //el semaforo pasa a estar inactivo
     release(&sem_array[sem].lock);
@@ -111,7 +110,7 @@ sem_up(int sem)
   }else {
 
   sem_array[sem].value++;
-  wakeup(&sem_array[sem]);        //si un semaforo esta dormido, wakeup() lo despierta
+  wakeup(&sem_array[sem]);        //si un proceso esta dormido, wakeup() lo despierta
   release(&sem_array[sem].lock);
   return SUCCESS;
   }
@@ -123,15 +122,15 @@ int
 sem_down(int sem)
 {
   acquire(&sem_array[sem].lock);
-  if (sem_array[sem].active < 0) { //el arreglo esta inactivo
+  if (sem_array[sem].active < 0) { //caso: el semaforo esta inactivo
     release(&sem_array[sem].lock);
     return ERROR;
   } 
-  else {                           // se decrementa normal
+  else {                           //caso: el semaforo esta activo
     if (sem_array[sem].value > 0) {
       sem_array[sem].value--;
     } 
-    else { //si (sem_array[sem].value == 0)
+    else { 
       while (sem_array[sem].value == 0) {
         sleep(&sem_array[sem], &sem_array[sem].lock);  //se intento pedir recurso en 0 por lo que se duerme el proceso
       }
